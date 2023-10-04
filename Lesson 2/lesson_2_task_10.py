@@ -4,4 +4,7 @@ def how_much_money(money, years):
     return int(money)
 
 
-print(how_much_money(1500, 7))
+cost = int(input("Пожалуйста, введите сумму, которую хотите внести во вклад:"))
+years = int(input("Пожалуйста, введите количество лет, на которые хотите положить деньги:"))
+
+print(how_much_money(cost, years))
