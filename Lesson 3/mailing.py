@@ -3,9 +3,6 @@ from address import Address
 class Mailing:
 
 
-    cost = 0
-    track = "unknown"
-
     def __init__(self, to_address, from_address, cost, track) -> None:
         self.to_address = to_address
         self.from_address = from_address

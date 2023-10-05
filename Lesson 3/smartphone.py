@@ -1,9 +1,5 @@
 class Smartpone:
 
-    mark = "unknown"
-    model = "unknown"
-    number = "unknown"
-
     def __init__(self, mark, model, number) -> None:
         self.mark = mark
         self.model = model
