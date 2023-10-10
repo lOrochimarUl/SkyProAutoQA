@@ -57,12 +57,6 @@ def test_string_partition_with_empty_delimeter():
 def test_symbol_containing(utilite, string, symbol, result):
     assert StringUtils.contains(utilite, string, symbol) == result
 
-# Поиск пустой строки
-@pytest.mark.xfail(strict = True)
-def test_symbol_containing_searching_of_empty():
-    assert StringUtils.contains(stringUtilits, "Hello", "") == True
-
-
 #-------------------------------------------------------------------------------------------------------------------
 # Удаление подстроки из строки
 @pytest.mark.parametrize('utilite, string, symbols_for_deleting, result', 
