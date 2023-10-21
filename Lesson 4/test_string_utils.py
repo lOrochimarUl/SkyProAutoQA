@@ -15,6 +15,11 @@ stringUtilits = StringUtils()
 def test_first_low_char_into_high(utilite, string, result):
     assert StringUtils.capitilize(utilite, string) == result
 
+@pytest.mark.xfail
+def test_n_first_low_char_into_high_without_string():
+    with(TypeError):
+        StringUtils.capitilize(stringUtilits, None)
+
 #-------------------------------------------------------------------------------------------------------------------------------
 # Удаление пробелов в начале строки
 @pytest.mark.parametrize('utilite, string, result', 
@@ -23,6 +28,11 @@ def test_first_low_char_into_high(utilite, string, result):
     (stringUtilits, "", "")])
 def test_whitespace_deleting(utilite, string, result):
     assert StringUtils.trim(utilite, string) == result
+
+@pytest.mark.xfail
+def test_n_whitespace_deleting_without_string():
+    with(TypeError):
+        StringUtils.trim(stringUtilits, None)
 
 
 #-------------------------------------------------------------------------------------------------------------------------------
@@ -40,7 +50,7 @@ def test_string_partition_without_specifying_delimeter():
     assert ["Hello", " my friend", " how are you doing?"] == StringUtils.to_list(stringUtilits, "Hello, my friend, how are you doing?")
 
 # Разделение строк символом с указанием разделителя в виде пустой строки
-def test_string_partition_with_empty_delimeter():
+def test_n_string_partition_with_empty_delimeter():
     with pytest.raises(ValueError):
         StringUtils.to_list(stringUtilits, "Hello, my friend, how are you doing?", "")
 
@@ -57,6 +67,11 @@ def test_string_partition_with_empty_delimeter():
 def test_symbol_containing(utilite, string, symbol, result):
     assert StringUtils.contains(utilite, string, symbol) == result
 
+@pytest.mark.xfail
+def test_n_symbol_containing_without_symbol():
+    with(TypeError):
+        StringUtils.contains(stringUtilits, "Hello", None, True)
+
 #-------------------------------------------------------------------------------------------------------------------
 # Удаление подстроки из строки
 @pytest.mark.parametrize('utilite, string, symbols_for_deleting, result', 
@@ -67,6 +82,10 @@ def test_symbol_containing(utilite, string, symbol, result):
 def test_symbols_deleting(utilite, string, symbols_for_deleting, result):
     assert StringUtils.delete_symbol(utilite, string, symbols_for_deleting) == result
 
+@pytest.mark.xfail
+def test_n_symbols_deleting_without_string():
+    with(TypeError):
+        StringUtils.delete_symbol(stringUtilits, None, "o")
 
 #-------------------------------------------------------------------------------------------------------------------
 # Соответствие первых символов строки с заданным значением
@@ -79,6 +98,10 @@ def test_symbols_deleting(utilite, string, symbols_for_deleting, result):
 def test_starting_with(utilite, string, symbol, result):
     assert StringUtils.starts_with(utilite, string, symbol) == result
 
+@pytest.mark.xfail
+def test_n_symbol_containing_without_string():
+    with(TypeError):
+        StringUtils.starts_with(stringUtilits, None, "o", True)
 
 #-------------------------------------------------------------------------------------------------------------------
 # Соответствие последних символов строки с заданным значением
@@ -88,9 +111,13 @@ def test_starting_with(utilite, string, symbol, result):
      (stringUtilits, "Hello", "ll", False),
      (stringUtilits, "Hello   ", "o", False),
      (stringUtilits, "Hello   ", " ", True)])
-def ending_with(utilite, string, symbol, result):
+def test_ending_with(utilite, string, symbol, result):
     assert StringUtils.end_with(utilite, string, symbol) == result
 
+@pytest.mark.xfail
+def test_n_ending_with_without_string():
+    with(TypeError):
+        StringUtils.end_with(stringUtilits, None, "o", True)
 
 #-------------------------------------------------------------------------------------------------------------------
 # Пустая строка или нет
@@ -98,9 +125,13 @@ def ending_with(utilite, string, symbol, result):
     [(stringUtilits, "      ", True), 
     (stringUtilits, "", True), 
     (stringUtilits, " , ", False)])
-def is_empty(utilite, string, result):
-    assert StringUtils(utilite, string) == result
+def test_is_empty(utilite, string, result):
+    assert StringUtils.is_empty(utilite, string) == result
 
+@pytest.mark.xfail
+def test_n_is_empty_without_string():
+    with(TypeError):
+        StringUtils.is_empty(stringUtilits, None, True)
 
 #-------------------------------------------------------------------------------------------------------------------
 # Список строк в одну строку с разделителем
@@ -113,3 +144,8 @@ def is_empty(utilite, string, result):
     (stringUtilits, [1, 2, 3, 4, 5], "", "12345" )])
 def test_list_to_string(utilite, list, delimeter, result):
     assert StringUtils.list_to_string(utilite, list, delimeter) == result
+
+@pytest.mark.xfail
+def test_n_list_to_string_int_instead_of_list():
+    with(TypeError):
+        StringUtils.list_to_string(stringUtilits, 123, True)
