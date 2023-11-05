@@ -1,0 +1,17 @@
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service as FireFoxService
+from selenium.webdriver.common import by
+from webdriver_manager.firefox import GeckoDriverManager
+
+
+driver = webdriver.Firefox(service = FireFoxService(GeckoDriverManager().install()))
+
+driver.get("http://the-internet.herokuapp.com/add_remove_elements/")
+
+add_button = driver.find_element(by.By.CSS_SELECTOR, '[onclick = "addElement()"]')
+
+for x in range (5):
+    add_button.click()
+    print("Button was clicked " + str(x + 1) + " times")
+
+print("Added elements on the page: " + str(len(driver.find_elements(by.By.CLASS_NAME, 'added-manually'))))
