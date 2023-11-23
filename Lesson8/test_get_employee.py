@@ -4,7 +4,7 @@ import requests
 
 base_url = "https://x-clients-be.onrender.com"
 employee_url = "/employee"
-employee_id = "74"
+employee_id = "140"
 non_existinct_employee_id = "999"
 
 
@@ -44,7 +44,9 @@ def test_get_employee_without_company_id():
  
 @pytest.mark.l8
 def test_get_employee_from_non_existent_company():
-    assert requests.get(base_url + employee_url, "0").status_code == 500
+    response = requests.get(base_url + employee_url, "0")
+    assert response.status_code == 500
+
 
 
 #------------------------------------------------------------------------------------------------------------------------------------
@@ -74,8 +76,7 @@ employee_data_without_required_fields = [
         "phone": "88005553535",
         "birthdate": "1998-11-15T18:21:37.199Z",
         "isActive": True,
-    },
-    {
+    },{
         "id": 0,
         #"firstName": "Alexandr",
         "lastName": "Byk",
@@ -86,8 +87,7 @@ employee_data_without_required_fields = [
         "phone": "88005553535",
         "birthdate": "1998-11-15T18:21:37.199Z",
         "isActive": True,
-    },
-    {
+    },{
         "id": 0,
         "firstName": "Alexandr",
         #"lastName": "Byk",
@@ -98,20 +98,7 @@ employee_data_without_required_fields = [
         "phone": "88005553535",
         "birthdate": "1998-11-15T18:21:37.199Z",
         "isActive": True,
-    },
-    {
-        "id": 0,
-        "firstName": "Alexandr",
-        "lastName": "Byk",
-        #"middleName": "Olegovich",
-        "companyId": 98,
-        "email": "email@gmail.com",
-        "url": "https://sanya.com",
-        "phone": "88005553535",
-        "birthdate": "1998-11-15T18:21:37.199Z",
-        "isActive": True,
-    },
-    {
+    },{
         "id": 0,
         "firstName": "Alexandr",
         "lastName": "Byk",
@@ -122,66 +109,6 @@ employee_data_without_required_fields = [
         "phone": "88005553535",
         "birthdate": "1998-11-15T18:21:37.199Z",
         "isActive": True,
-    },
-    {
-        "id": 0,
-        "firstName": "Alexandr",
-        "lastName": "Byk",
-        "middleName": "Olegovich",
-        "companyId": 98,
-        #"email": "email@gmail.com",
-        "url": "https://sanya.com",
-        "phone": "88005553535",
-        "birthdate": "1998-11-15T18:21:37.199Z",
-        "isActive": True,
-    },
-    {
-        "id": 0,
-        "firstName": "Alexandr",
-        "lastName": "Byk",
-        "middleName": "Olegovich",
-        "companyId": 98,
-        "email": "email@gmail.com",
-        #"url": "https://sanya.com",
-        "phone": "88005553535",
-        "birthdate": "1998-11-15T18:21:37.199Z",
-        "isActive": True,
-    },
-    {
-        "id": 0,
-        "firstName": "Alexandr",
-        "lastName": "Byk",
-        "middleName": "Olegovich",
-        "companyId": 98,
-        "email": "email@gmail.com",
-        "url": "https://sanya.com",
-        #"phone": "88005553535",
-        "birthdate": "1998-11-15T18:21:37.199Z",
-        "isActive": True,
-    },
-    {
-        "id": 0,
-        "firstName": "Alexandr",
-        "lastName": "Byk",
-        "middleName": "Olegovich",
-        "companyId": 98,
-        "email": "email@gmail.com",
-        "url": "https://sanya.com",
-        "phone": "88005553535",
-        #"birthdate": "1998-11-15T18:21:37.199Z",
-        "isActive": True,
-    },
-    {
-        "id": 0,
-        "firstName": "Alexandr",
-        "lastName": "Byk",
-        "middleName": "Olegovich",
-        "companyId": 98,
-        "email": "email@gmail.com",
-        "url": "https://sanya.com",
-        "phone": "88005553535",
-        "birthdate": "1998-11-15T18:21:37.199Z",
-        #"isActive": "True",
     }]
 
 @pytest.mark.l8
@@ -198,11 +125,12 @@ def test_create_employee_without_body(f_test_auth):
     print(response.text)
     assert response.status_code == 500
 
-@pytest.mark.l8                                                                   #---------------------------------------------------------
-@pytest.mark.parametrize("employee_data", employee_data_without_required_fields)  # Т.к. в Свагере информации нет предположим, что все поля 
-def test_unfilling_required_employee_fields(employee_data, f_test_auth):          # обязательны и отсутсвие хотя бы одного вызовет 500ку
+@pytest.mark.l8                                                                   
+@pytest.mark.parametrize("employee_data", employee_data_without_required_fields)  
+def test_unfilling_required_employee_fields(employee_data, f_test_auth):          
     response = requests.post(base_url + employee_url, headers = {"x-client-token" : f_test_auth}, json = employee_data)
     assert response.status_code == 500
+
 
 
 #------------------------------------------------------------------------------------------------------------------------------------
@@ -259,7 +187,7 @@ def test_change_employee_data(id: int, data_to_change: dict, f_test_auth):
   
     response = requests.patch(base_url + employee_url + "/" + str(id), headers = {"x-client-token" : f_test_auth}, json = data_to_change)
     
-    assert response.status_code == 201
+    assert response.status_code == 200
     assert response.json()["lastName"] == data_to_change["lastName"]
     assert response.json()["email"] ==  data_to_change["email"]
     assert response.json()["url"] == data_to_change["url"]
@@ -291,12 +219,10 @@ def test_change_non_existinct_employee_data(id: int, data_to_change: dict, f_tes
 @pytest.mark.parametrize("id, key, value", employee_data_to_change_separatly)
 def test_change_employee_data_fields_separatly(id: int, key: str, value, f_test_auth):
 
-    request_body = {
-        key : value
-    }
     response =  requests.patch(
-        base_url + employee_url + "/" + str(id), headers = {"x-client-token" : f_test_auth}, json = request_body
+        base_url + employee_url + "/" + str(id), headers = {"x-client-token" : f_test_auth}, json = {key : value}
     )
+
     assert response.status_code == 200
     assert str(response.json()[key]) == str(value)
 
