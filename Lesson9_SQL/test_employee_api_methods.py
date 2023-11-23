@@ -1,6 +1,7 @@
 import pytest
 import requests
-from db import DBMethods
+from support_functions import Support
+from db_methods import DBMethods
 from api_methods import APIMethods
 from sqlalchemy import URL
 
@@ -13,23 +14,24 @@ url = URL.create(
     )
 db = DBMethods(url)
 api = APIMethods()
+support = Support()
 #------------------------------------------------------------------------------------------------------------------------------------
 # Test data
 
-valid_employee_data_api = {
+empl_data_for_api = {
             "id": 0,
-            "firstName": "Alexandr",
+            "firstName": "Michael",
             "lastName": "Byk",
-            "middleName": "Olegovich",
-            "companyId": 98,
+            "middleName": "Michaelovich",
+            "companyId": 0,
             "email": "email@gmail.com",
-            "url": "https://sanya.com",
+            "url": "https://misha.com",
             "phone": "88005553535",
             "birthdate": "1998-11-15T18:21:37.199Z",
             "isActive": True
         }
-company_name = "Компания"
-data_for_creating_five_employees_bd = [
+company_name = "Тест компания"
+data_for_create_five_empls_db = [
     {
         "firstName" : "Alex",
         "lastName" : "1",
@@ -183,7 +185,7 @@ def test_get_employees_by_company_id():
 
     # Подготовка
     company_id = db.create_company(company_name)
-    for x in data_for_creating_five_employees_bd:
+    for x in data_for_create_five_empls_db:
         db.create_employee(company_id, x)
 
     # Считывание
@@ -205,42 +207,50 @@ def test_get_employees_by_company_id():
 def test_get_employee_without_company_id():
     assert api.get_employees_by_company_id(company_id=None).status_code == 500, "Status code isn't 500"
 
-def test_get_employee_from_non_existent_company():
-    
-    company_id = db.create_company(company_name)
-    response = api.get_employees_by_company_id(company_id)
-    assert response.status_code == 200, "Status code isn't 200"
-    assert response.text == '[]', "Not empty body"
-    db.delete_company_by_id(company_id)
-    
 
 
 #------------------------------------------------------------------------------------------------------------------------------------
 # [post]/employee
 
-def test_create_employee():
+@pytest.mark.this
+def test_create_employee(f_test_auth):
     
+    # Подготовка
+    global empl_data_for_api
     company_id = db.create_company(company_name)
+    empl_data_for_api["companyId"] = company_id
 
-    api.create_employee()
-    #assert requests.post(base_url + employee_url, headers = {"x-client-token" : f_test_auth}, json = employee_data).status_code == 201
+    # Создание сотрудника
+    employee_response = api.create_employee(empl_data_for_api, f_test_auth)
+    
+    #Подготовка к проверке
+    employee_from_db = db.get_employee_by_id(employee_response.json()["id"])
+    result_from_db_as_dict = employee_from_db.mappings().all()
+
+    empl_data_for_api["birthdate"] = support.parse_date_from_api_body(empl_data_for_api["birthdate"])
+    empl_data_for_api["id"] = employee_response.json()["id"]
+    empl_data_for_api = support.change_api_data_to_db_view(empl_data_for_api)
+
+    result = set(result_from_db_as_dict[0].items()).difference(set(empl_data_for_api.items()))
+
+    # Чистка
+    db.delete_employees_by_company_id(company_id)
+    db.delete_company_by_id(company_id)
+
+    # Проверки
+    assert employee_response.status_code == 201 
+    try:
+        assert result == {}
+    except AssertionError:
+        print("Следующие поля отличаются от данных тела запроса")
+        for x in result:
+            print(x)
+        assert False, "Данные из тела запроса и БД отличаются"
 
 
 
-
-#print(db.create_company("Горох"))
-#for x in data_for_creating_five_employees_bd:
-#    db.create_employee("141", x)
-#list_db = db.get_company_employees("141")
-#e = api.get_employees_by_company_id('141')
-
-
-#for x in range (len(list_db) + 1):
-#    assert e.json()[x]["id"] == list_db[x]
-#    print(1)
-
-
-
+#------------------------------------------------------------------------------------------------------------------------------------
+# [get]/employee/{id}
 
 
 

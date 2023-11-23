@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy import select, delete
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase
 from support_functions import Support 
@@ -24,8 +24,12 @@ class Employee(Base):
     id = Column(Integer, primary_key=True)
     first_name = Column(String)
     last_name = Column(String)
-    phone = Column(String)
+    middle_name = Column(String)
     company_id = Column(Integer)
+    email = Column(String)    
+    avatar_url = Column(String)
+    phone = Column(String)
+    birthdate = Column(Date)
     is_active = Column(Boolean, default=True)
 
 
@@ -62,6 +66,13 @@ class DBMethods:
                 employees_id_list.append(company_employees[x]._data[0])
             return employees_id_list
 
+    def get_employee_by_id(self, id):
+        
+        select_statement = select(Employee).where(Employee.id == id)
+        with self.db.engine.begin() as conn:
+            return conn.execute(select_statement)
+            
+
     def delete_employees_by_company_id(self, company_id):
         
         delete_statement = delete(Employee).where(Employee.company_id == company_id)
@@ -76,13 +87,8 @@ class DBMethods:
             print(result)
         
 
-url = URL.create(
-    "postgresql",
-    username="x_clients_user",
-    password="axcmq7V3QLCQwgL39GymqgasJhUlDbH4",
-    host="dpg-cl53o6ql7jac73cbgi2g-a.frankfurt-postgres.render.com",
-    database="x_clients"
-    )
+#url = URL.create("postgresql",username="x_clients_user",password="axcmq7V3QLCQwgL39GymqgasJhUlDbH4",host="dpg-cl53o6ql7jac73cbgi2g-a.frankfurt-postgres.render.com",database="x_clients")
 #methods = DBMethods(url)
 #methods.delete_company_by_id(171)
 #methods.delete_employees_by_company_id(98)
+#buba = methods.get_employee_by_id(140)

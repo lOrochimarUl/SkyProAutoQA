@@ -1,9 +1,6 @@
 import pytest
 import requests
 
-import pytest
-import requests
-
 
 base_url = "https://x-clients-be.onrender.com"
 employee_url = "/employee"
@@ -13,57 +10,28 @@ non_existinct_employee_id = "999"
 class APIMethods:
 
     #------------------------------------------------------------------------------------------------------------------------------------
-    # [post]/auth/login
-    @pytest.fixture()
-    def f_test_auth():
-
-        credentials = {
-            "username": "bloom",
-            "password": "fire-fairy"
-            }
-        
-        response = requests.post(base_url + "/auth/login", json=credentials)
-        assert response.status_code == 201
-        print("Токен получен: " + response.json()["userToken"])
-
-
-    #------------------------------------------------------------------------------------------------------------------------------------
     # [get]/employee
 
     def get_employees_by_company_id(self, company_id):
-        return requests.get(base_url + employee_url, "company=" + str(company_id))
+        return requests.get(
+            base_url + employee_url,
+            "company=" + str(company_id)
+        )
 
 
 
     #------------------------------------------------------------------------------------------------------------------------------------
     # [post]/employee
 
-    def create_employee(employee_data: dict, f_test_auth):
-        return requests.post(
+    def create_employee(self, employee_data: dict, f_test_auth):
+        header = {"x-client-token" : f_test_auth}
+        response = requests.post(
             base_url + employee_url,
-            headers = {"x-client-token" : f_test_auth},
+            headers=header,
             json = employee_data
         )
+        return response
 
-
-
-
-
-
-    @pytest.mark.l8
-    def test_create_employee_without_body(f_test_auth):
-            
-        employee_data = {}
-        
-        response = requests.post(base_url + employee_url, headers = {"x-client-token" : f_test_auth}, json = employee_data)
-        print(response.text)
-        assert response.status_code == 500
-
-    #@pytest.mark.l8                                                                   #---------------------------------------------------------
-    #@pytest.mark.parametrize("employee_data", employee_data_without_required_fields)  # Т.к. в Свагере информации нет предположим, что все поля 
-    def test_unfilling_required_employee_fields(employee_data, f_test_auth):          # обязательны и отсутсвие хотя бы одного вызовет 500ку
-        response = requests.post(base_url + employee_url, headers = {"x-client-token" : f_test_auth}, json = employee_data)
-        assert response.status_code == 500
 
 
     #------------------------------------------------------------------------------------------------------------------------------------
