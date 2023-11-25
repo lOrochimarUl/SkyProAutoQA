@@ -1,10 +1,8 @@
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy import select, delete
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase
 from support_functions import Support 
-from sqlalchemy import URL
 
 support = Support()
 
@@ -54,7 +52,7 @@ class DBMethods:
                                 company_id = company
                             ))
         with self.db.engine.begin() as conn:
-            conn.execute(insert_statement)
+            return conn.execute(insert_statement)
 
     def get_company_employees(self, company):
         
@@ -72,6 +70,11 @@ class DBMethods:
         with self.db.engine.begin() as conn:
             return conn.execute(select_statement)
             
+    def get_employee_with_max_id(self):
+        
+        select_statement = select(Employee).where(Employee.id, max())
+        with self.db.engine.begin() as conn:
+            return conn.execute(select_statement)
 
     def delete_employees_by_company_id(self, company_id):
         
@@ -86,9 +89,3 @@ class DBMethods:
             result = conn.execute(delete_statement)
             print(result)
         
-
-#url = URL.create("postgresql",username="x_clients_user",password="axcmq7V3QLCQwgL39GymqgasJhUlDbH4",host="dpg-cl53o6ql7jac73cbgi2g-a.frankfurt-postgres.render.com",database="x_clients")
-#methods = DBMethods(url)
-#methods.delete_company_by_id(171)
-#methods.delete_employees_by_company_id(98)
-#buba = methods.get_employee_by_id(140)
