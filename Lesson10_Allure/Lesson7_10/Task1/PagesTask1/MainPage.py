@@ -6,12 +6,12 @@ class MainPage:
     def __init__(self, driver) -> None:
         self._driver = driver
 
-    def to_main_page(self):
+    def to_main_page(self) -> None:  
         """"Осуществляет переход на главную страницу"""
 
         self._driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
 
-    def fullfill_fields(self, fields: list, values: list):
+    def fullfill_fields(self, fields: list, values: list) -> None:
         """
         Заполняет указанные поля значениями из списка. Количество полей и значений должны быть равны. В ином случае 
         бросает Exception
@@ -28,7 +28,9 @@ class MainPage:
         for x in range(len(fields)):
             self._driver.find_element(By.CSS_SELECTOR, "input[name = '" + fields[x] + "']").send_keys(values[x])
 
-    def click_submit(self):
+    def click_submit(self) -> None:
+        """Нажимает кнопку  "Submit" """
+
         self._driver.find_element(By.CSS_SELECTOR, "button[type = 'submit']").click()
         
 
