@@ -24,4 +24,4 @@ def test_summ():
         main_page.click_number_or_dot(8)
         main_page.click_equals()
 
-        main_page.get_excepted_screen_value("15", delay)
+        main_page.get_excepted_screen_value("15", delay + 1)

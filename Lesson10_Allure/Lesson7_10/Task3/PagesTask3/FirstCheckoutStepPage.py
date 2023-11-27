@@ -7,7 +7,7 @@ class FirstCheckoutPage:
     def __init__(self, driver) -> None:
         self._driver = driver
 
-    @allure.step("Заполнить поля \"First name\", \"Last name\" и \"Zip-code\" соответствующими значениями {first_name},{second_name} и {zip_code}")
+    @allure.step("Заполнить поля \"First name\", \"Last name\" и \"Zip-code\" соответствующими значениями {first_name},{last_name} и {zip_code}")
     def fullfill_fields(self, first_name: str, last_name: str, zip_code: str) -> None:
         """
         Заполняет поля "First name", "Last name" и "Zip-code" указанными значениями
