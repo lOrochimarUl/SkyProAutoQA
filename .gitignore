@@ -5,3 +5,4 @@
 __pycache__/*
 .vscode/*
 allure-result/*
+allure_results/*

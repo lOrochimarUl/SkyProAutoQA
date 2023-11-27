@@ -17,7 +17,7 @@ checkout_values_list = ["Alexandr", "Byk", "000000"]
 @allure.description("Соответствие суммы чисел товаров в корзине фактическому результату")
 @allure.feature("Something")
 @allure.severity(allure.severity_level.CRITICAL)
-@pytest.mark.l7_10
+@pytest.mark.l10
 def test_summ():
     
     chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))

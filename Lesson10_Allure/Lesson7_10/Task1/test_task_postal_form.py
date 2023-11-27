@@ -16,7 +16,7 @@ list_of_values = ["Иван", "Петров", "Ленина, 55-3", "test@skypro
 @allure.description("Незаполненное поле zip-code подсвечивается красным")
 @allure.feature("Something")
 @allure.severity(allure.severity_level.NORMAL)
-@pytest.mark.l7_10
+@pytest.mark.l10
 def test_red_color_field():
 
     chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
@@ -35,7 +35,7 @@ def test_red_color_field():
 @allure.description("Заполненные поля подсвечивается зелёным")
 @allure.feature("Something")
 @allure.severity(allure.severity_level.NORMAL)
-@pytest.mark.l7_10
+@pytest.mark.l10
 def test_green_color_fields():
  
         chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))

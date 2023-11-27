@@ -1,3 +1,4 @@
+import allure
 import pytest
 from support_functions import Support
 from db_methods import DBMethods
@@ -207,7 +208,11 @@ list_data_to_change = [
 #------------------------------------------------------------------------------------------------------------------------------------
 # [get]/employee
 
-@pytest.mark.l9
+@allure.title("Получение списка сотрудников компании")
+@allure.description("Получение списка сотрудников через id компании")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.l10
 def test_get_employees_by_company_id():
 
     # Подготовка
@@ -224,23 +229,31 @@ def test_get_employees_by_company_id():
     db.delete_company_by_id(company_id)
 
     # Проверки
-    assert employee_list_from_api.status_code == 200, "Status code isn't 200"
+    assert employee_list_from_api.status_code == 200, "Статус должен быть 200"
     try:
         for x in range (len(employees_id_list_from_bd)):
             assert employee_list_from_api.json()[x]["id"] == employees_id_list_from_bd[x]
     except IndexError:
-        assert False, "Quantity of id from DB and API aren't equal"
+        assert False, "Количество id из БД и API не совпадает"
 
-@pytest.mark.l9
+@allure.title("Попытка получения списка сотрудников без id компании")
+@allure.description("Попытка получения списка сотрудников без  указания id компании")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.NORMAL)
+@pytest.mark.l10
 def test_get_employee_without_company_id():
-    assert api.get_employees_by_company_id(company_id=None).status_code == 500, "Status code isn't 500"
+    assert api.get_employees_by_company_id(company_id=None).status_code == 500, "Статус код должен быть 500"
 
 
 
 #------------------------------------------------------------------------------------------------------------------------------------
 # [post]/employee
 
-@pytest.mark.l9
+@allure.title("Создание сотрудника")
+@allure.description("Создание сотрудника с валидными данными")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.l10
 @pytest.mark.parametrize("empl_data_s", [emp_data_for_api])
 def test_create_employee(empl_data_s: dict, f_test_auth):
     
@@ -281,7 +294,11 @@ def test_create_employee(empl_data_s: dict, f_test_auth):
 #------------------------------------------------------------------------------------------------------------------------------------
 # [get]/employee/{id}
 
-@pytest.mark.l9
+@allure.title("Получение данных сотрудника")
+@allure.description("Получение данных сотрудника с помощью его id")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.l10
 @pytest.mark.parametrize("emp_data", [emp_data_for_api])
 def test_get_employee_by_id(emp_data):
 
@@ -296,7 +313,11 @@ def test_get_employee_by_id(emp_data):
 
     assert response.status_code == 200
 
-@pytest.mark.l9
+@allure.title("Попытка получения данных несуществующего сотрудника")
+@allure.description("Попытка получения данных по несуществующему id")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.MINOR)
+@pytest.mark.l10
 @pytest.mark.parametrize("emp_data", [emp_data_for_api])
 def test_get_non_existinct_employee_by_id(emp_data):
 
@@ -317,7 +338,11 @@ def test_get_non_existinct_employee_by_id(emp_data):
 #------------------------------------------------------------------------------------------------------------------------------------
 # [patch]/employee/{id}
 
-@pytest.mark.l9
+@allure.title("Изменение данных сотрудника")
+@allure.description("Изменение данных сотрудника")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.l10
 @pytest.mark.parametrize("emp_data, data_to_change", [(emp_data_for_api, emp_data_to_change)])
 def test_change_employee_data(emp_data: dict, data_to_change: dict, f_test_auth):
 
@@ -344,7 +369,7 @@ def test_change_employee_data(emp_data: dict, data_to_change: dict, f_test_auth)
     assert count == 0, "В теле ответа не найдено " + str(count) + " поля"
 
 
-@pytest.mark.l9
+@pytest.mark.l10
 @pytest.mark.parametrize("emp_data, data_to_change", [(emp_data_for_api, emp_data_bad_email)])
 def test_change_employee_data_bad_email(emp_data, data_to_change, f_test_auth):
 
@@ -360,7 +385,11 @@ def test_change_employee_data_bad_email(emp_data, data_to_change, f_test_auth):
     assert response.status_code == 400, "Статус код должен быть 400"
     assert response.json()["message"] == ["email must be an email"]
 
-@pytest.mark.l9
+@allure.title("Изменение отдельных данных сотрудника")
+@allure.description("Изменение  данных сотрудника по отдельноости")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.l10
 @pytest.mark.parametrize("value_to_change", list_data_to_change)
 def test_change_employee_data_fields_separatly(value_to_change, f_test_auth):
 

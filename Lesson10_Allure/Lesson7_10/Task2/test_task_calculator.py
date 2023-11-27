@@ -11,7 +11,7 @@ delay = int(5)
 @allure.description("Соответствие суммы чисел фактическому результату через n-ое количеств овремени")
 @allure.feature("Something")
 @allure.severity(allure.severity_level.CRITICAL)
-@pytest.mark.l7_10
+@pytest.mark.l10
 def test_summ():
 
         chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
