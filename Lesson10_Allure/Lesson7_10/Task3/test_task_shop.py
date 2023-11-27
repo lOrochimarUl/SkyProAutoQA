@@ -1,3 +1,4 @@
+import allure
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -12,8 +13,13 @@ from PagesTask3.SecondCheckoutStepPage import SecondCheckoutPage
 product_list = ["backpack", "bolt-t-shirt", "onesie"]
 checkout_values_list = ["Alexandr", "Byk", "000000"]
 
-@pytest.mark.l7
+@allure.title("Получение общей цены товаров")
+@allure.description("Соответствие суммы чисел товаров в корзине фактическому результату")
+@allure.feature("Something")
+@allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.l7_10
 def test_summ():
+    
     chrome = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
     login_page = LoginPage(chrome)
     main_page = MainPage(chrome)

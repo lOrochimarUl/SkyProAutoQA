@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 class ResultPage:
@@ -6,6 +7,7 @@ class ResultPage:
     def __init__(self, driver) -> None:
         self._driver = driver
     
+    @allure.step("Получить цвет фона объекта")
     def check_field_color(self, id: str) -> str:
         """
         Возвращает цвет фона элемента

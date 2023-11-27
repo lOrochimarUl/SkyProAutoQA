@@ -26,7 +26,7 @@ class MainPage:
     def click_equals(self):
         self._driver.find_element(By.XPATH, "//span[@class = 'btn btn-outline-warning'][text() = '=']").click()
 
-    def get_excepted_screen_value(self, value: str):
-        WebDriverWait(self._driver, 46).until(
+    def get_excepted_screen_value(self, value: str, delay: int):
+        WebDriverWait(self._driver, delay).until(
             EC.text_to_be_present_in_element((By.CSS_SELECTOR, "div.screen"), value)
         )

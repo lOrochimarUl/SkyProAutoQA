@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 class SecondCheckoutPage:
@@ -6,6 +7,7 @@ class SecondCheckoutPage:
     def __init__(self, driver) -> None:
         self._driver = driver
 
+    @allure.step("Получить значение \"Total cost\"")
     def get_total_cost(self) -> str:
         """Возвращает цену из значения "Total cost" """
 

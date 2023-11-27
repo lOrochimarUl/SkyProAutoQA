@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 class CartPage:
@@ -6,6 +7,7 @@ class CartPage:
     def __init__(self, driver) -> None:
         self._driver = driver
 
+    @allure.step("Нажать на \"Checkout\"")
     def click_checkout(self) -> None:
         """Нажимает на кнопку "Checkout" """
 

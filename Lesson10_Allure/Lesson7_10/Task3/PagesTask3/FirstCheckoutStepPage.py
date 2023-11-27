@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 class FirstCheckoutPage:
@@ -6,6 +7,7 @@ class FirstCheckoutPage:
     def __init__(self, driver) -> None:
         self._driver = driver
 
+    @allure.step("Заполнить поля \"First name\", \"Last name\" и \"Zip-code\" соответствующими значениями {first_name},{second_name} и {zip_code}")
     def fullfill_fields(self, first_name: str, last_name: str, zip_code: str) -> None:
         """
         Заполняет поля "First name", "Last name" и "Zip-code" указанными значениями
@@ -21,6 +23,7 @@ class FirstCheckoutPage:
         self._driver.find_element(By.ID, "last-name").send_keys(last_name)
         self._driver.find_element(By.ID, "postal-code").send_keys(zip_code)
     
+    @allure.step("Нажать \"Continue\"")
     def click_continue(self) -> None:
         """Нажимает кнопку "Continue" """
 
